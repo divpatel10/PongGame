@@ -60,51 +60,51 @@ public class Ball {
     }
 
     void reset(int x, int y){
-// Initialise the four points of
-// the rectangle which defines the ball
+    // Initialise the four points of
+    // the rectangle which defines the ball
         mRect.left = x / 2;
         mRect.top = 0;
         mRect.right = x / 2 + mBallWidth;
         mRect.bottom = mBallHeight;
-// How fast will the ball travel
-// You could vary this to suit
-// You could even increase it as the game progresses
-// to make it harder
+    // How fast will the ball travel
+    // You could vary this to suit
+    // You could even increase it as the game progresses
+    // to make it harder
         mYVelocity = -(y / 3);
         mXVelocity = (x / 2);
     }
 
     void increaseVelocity(){
-// increase the speed by 10%
+    // increase the speed by 10%
         mXVelocity = mXVelocity * 1.1f;
         mYVelocity = mYVelocity * 1.1f;
     }
 
     // Bounce the ball back based on
-// whether it hits the left or right-hand side
+    // whether it hits the left or right-hand side
     void batBounce(RectF batPosition){
-// Detect centre of bat
+    // Detect centre of bat
         float batCenter = batPosition.left +
                 (batPosition.width() / 2);
-// detect the centre of the ball
+    // detect the centre of the ball
         float ballCenter = mRect.left + (mBallWidth / 2);
-// Where on the bat did the ball hit?
+    // Where on the bat did the ball hit?
         float relativeIntersect = (batCenter - ballCenter);
-// Pick a bounce direction
+    // Pick a bounce direction
         if(relativeIntersect < 0){
-// Go right
+    // Go right
             mXVelocity = Math.abs(mXVelocity);
-// Math.abs is a static method that
-// strips any negative values from a value.
-// So -1 becomes 1 and 1 stays as 1
+    // Math.abs is a static method that
+    // strips any negative values from a value.
+    // So -1 becomes 1 and 1 stays as 1
         }else{
-// Go left
+    // Go left
             mXVelocity = -Math.abs(mXVelocity);
         }
-// Having calculated left or right for
-// horizontal direction simply reverse the
-// vertical direction to go back up
-// the screen
+    // Having calculated left or right for
+    // horizontal direction simply reverse the
+    // vertical direction to go back up
+    // the screen
         reverseYVelocity();
     }
 }
