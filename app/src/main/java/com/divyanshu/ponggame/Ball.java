@@ -1,6 +1,9 @@
 package com.divyanshu.ponggame;
 
 import android.graphics.RectF;
+
+import java.util.Random;
+
 public class Ball {
     // These are the member variables (fields)
     // They all have the m prefix
@@ -52,11 +55,11 @@ public class Ball {
 
     // Reverse the vertical direction of travel
     void reverseYVelocity(){
-        mYVelocity = -mYVelocity;
+        mYVelocity =  -mYVelocity ;
     }
     // Reverse the horizontal direction of travel
     void reverseXVelocity(){
-        mXVelocity = -mXVelocity;
+        mXVelocity = -mXVelocity ;
     }
 
     void reset(int x, int y){
@@ -91,20 +94,47 @@ public class Ball {
     // Where on the bat did the ball hit?
         float relativeIntersect = (batCenter - ballCenter);
     // Pick a bounce direction
+
+
+
         if(relativeIntersect < 0){
     // Go right
-            mXVelocity = Math.abs(mXVelocity);
+            mXVelocity = Math.abs(changeVelocity(true));
+            mYVelocity = -Math.abs(changeVelocity(false));
+
     // Math.abs is a static method that
     // strips any negative values from a value.
     // So -1 becomes 1 and 1 stays as 1
         }else{
     // Go left
-            mXVelocity = -Math.abs(mXVelocity);
+            mXVelocity = -Math.abs(changeVelocity(true));
+            mYVelocity = -Math.abs(changeVelocity(false));
         }
     // Having calculated left or right for
     // horizontal direction simply reverse the
     // vertical direction to go back up
     // the screen
-        reverseYVelocity();
     }
-}
+
+    // this function changes the direction of the ball, but maintains the overall velocity of the ball
+    float changeVelocity( boolean isX){
+        // Random angle from which the ball should bounce
+        Random random = new Random();
+        float randomAngle = (float) (random.nextFloat() * (5* 3.14/12));
+
+        // Find the Velocity of the ball
+        float ballVelocity = (float) Math.sqrt(
+                ((mXVelocity * mXVelocity) +
+                        (mYVelocity * mYVelocity)));
+        if(isX){
+            return (float) (ballVelocity * Math.cos(randomAngle));
+        }
+        else {
+            return (float) (ballVelocity * Math.sin(randomAngle));
+
+        }
+        }
+    }
+
+
+
