@@ -99,16 +99,13 @@ public class Ball {
 
         if(relativeIntersect < 0){
     // Go right
-            mXVelocity = Math.abs(changeVelocity(true));
-            mYVelocity = -Math.abs(changeVelocity(false));
-
+        changeVelocity(true);
     // Math.abs is a static method that
     // strips any negative values from a value.
     // So -1 becomes 1 and 1 stays as 1
         }else{
     // Go left
-            mXVelocity = -Math.abs(changeVelocity(true));
-            mYVelocity = -Math.abs(changeVelocity(false));
+            changeVelocity(false);
         }
     // Having calculated left or right for
     // horizontal direction simply reverse the
@@ -117,22 +114,22 @@ public class Ball {
     }
 
     // this function changes the direction of the ball, but maintains the overall velocity of the ball
-    float changeVelocity( boolean isX){
+    void changeVelocity( boolean isRight){
         // Random angle from which the ball should bounce
         Random random = new Random();
-        float randomAngle = (float) (random.nextFloat() * (5* 3.14/12));
+        float randomAngle = (float) ((random.nextFloat() * (3.14/4)) + 3.14/6 );
 
         // Find the Velocity of the ball
         float ballVelocity = (float) Math.sqrt(
                 ((mXVelocity * mXVelocity) +
                         (mYVelocity * mYVelocity)));
-        if(isX){
-            return (float) (ballVelocity * Math.cos(randomAngle));
-        }
-        else {
-            return (float) (ballVelocity * Math.sin(randomAngle));
+        mXVelocity = (float) Math.abs(ballVelocity * Math.cos(randomAngle));
+        mYVelocity = (float) -Math.abs(ballVelocity * Math.sin(randomAngle));
 
+        if(!isRight){
+             mXVelocity = -mXVelocity;
         }
+
         }
     }
 
