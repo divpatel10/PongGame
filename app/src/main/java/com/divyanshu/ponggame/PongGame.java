@@ -40,6 +40,10 @@ public class PongGame extends SurfaceView implements Runnable {
     // The game objects
     private Bat mBat;
     private Ball mBall;
+
+    private Obstacle mObstacle1;
+    private Obstacle mObstacle2;
+
     // The current score and lives remaining
     private int mScore;
     private int mLives;
@@ -57,6 +61,8 @@ public class PongGame extends SurfaceView implements Runnable {
     private int mBoopID = -1;
     private int mBopID = -1;
     private int mMissID = -1;
+
+
 
     // The PongGame constructor
     // Called when this line:
@@ -84,6 +90,13 @@ public class PongGame extends SurfaceView implements Runnable {
         // Initialize the bat and ball
         mBall = new Ball(mScreenX);
         mBat = new Bat(mScreenX, mScreenY);
+
+        mObstacle1 = new Obstacle(mScreenX,mScreenY);
+        mObstacle1.setMovementState(mObstacle1.LEFT);
+
+        mObstacle2 = new Obstacle(mScreenX,mScreenY);
+        mObstacle2.setMovementState(mObstacle2.RIGHT);
+
 
         // Prepare the SoundPool instance
         // Depending upon the version of Android
@@ -148,6 +161,11 @@ public class PongGame extends SurfaceView implements Runnable {
             // Draw the bat and ball
             mCanvas.drawRect(mBall.getRect(), mPaint);
             mCanvas.drawRect(mBat.getRect(), mPaint);
+
+            mCanvas.drawRect(mObstacle1.getRect(), mPaint);
+            mCanvas.drawRect(mObstacle2.getRect(), mPaint);
+
+
             // Choose the font size
             mPaint.setTextSize(mFontSize);
             // Draw the HUD
@@ -222,6 +240,8 @@ public class PongGame extends SurfaceView implements Runnable {
         // Update the bat and the ball
         mBall.update(mFPS);
         mBat.update(mFPS);
+        mObstacle1.update(mFPS);
+        mObstacle2.update(mFPS);
     }
 
     private void detectCollisions() {
@@ -234,7 +254,23 @@ public class PongGame extends SurfaceView implements Runnable {
             mSP.play(mBeepID, 1, 1, 0, 0, 1);
         }
 
+        // Has the bat hit the obstacles?
+        if(RectF.intersects(mObstacle1.getRect(), mBall.getRect())) {
+            mBall.batBounce(mBat.getRect());
+            mBall.increaseVelocity();
+            mScore++;
+            mSP.play(mBeepID, 1, 1, 0, 0, 1);
+        }
+
+        if(RectF.intersects(mObstacle2.getRect(), mBall.getRect())) {
+            mBall.batBounce(mBat.getRect());
+            mBall.increaseVelocity();
+            mScore++;
+            mSP.play(mBeepID, 1, 1, 0, 0, 1);
+        }
+
         // Has the ball hit the edge of the screen
+
         // Bottom
         if(mBall.getRect().bottom > mScreenY){
             mBall.reverseYVelocity();
@@ -245,6 +281,8 @@ public class PongGame extends SurfaceView implements Runnable {
                 startNewGame();
             }
         }
+
+
         // Top
         if(mBall.getRect().top < 0){
             mBall.reverseYVelocity();
@@ -294,6 +332,7 @@ public class PongGame extends SurfaceView implements Runnable {
     public boolean onTouchEvent(MotionEvent motionEvent) {
         // This switch block replaces the
         // if statement from the Sub Hunter game
+
         switch (motionEvent.getAction() &
                 MotionEvent.ACTION_MASK) {
         // The player has put their finger on the screen
