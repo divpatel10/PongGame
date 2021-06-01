@@ -8,10 +8,17 @@ import android.view.WindowManager;
 import android.graphics.Point;
 import android.view.Display;
 
+/**
+ * Launched when Android application is launcejd
+ */
 public class PongActivity extends Activity {
 
     private PongGame mPongGame;
 
+    /**
+     * This function is first called when the app is created
+     * Sends the screen size to the PongGame Clas
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

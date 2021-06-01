@@ -2,6 +2,9 @@ package com.divyanshu.ponggame;
 
 import android.graphics.RectF;
 
+/**
+ * Represents a Bat(or Paddle) for the game
+ */
 public class Bat {
 
     // These are the member variables (fields)
@@ -26,6 +29,11 @@ public class Bat {
     // Starting with STOPPED condition
     private int mBatMoving = STOPPED;
 
+    /**
+     * Constructs the Bat object with a length 1/8th the screen and width 1/40th of the screen
+     * @param sx    Screen Width
+     * @param sy    Screen Height
+     */
     public Bat(int sx, int sy){
     // Bat needs to know the screen
     // horizontal resolution
@@ -53,18 +61,25 @@ public class Bat {
         mBatSpeed = mScreenX;
     }
 
+    /**
+     * @return  Return a reference to the mRect object
+     */
     // Return a reference to the mRect object
     RectF getRect(){
         return mRect;
     }
 
-    // Update the movement state passed
-    // in by the onTouchEvent method
+    /** Update the movement state passed
+    * in by the onTouchEvent method
+    */
     void setMovementState(int state){
         mBatMoving = state;
     }
 
-    // Update the bat- Called each frame/loop
+    /**
+     *  Update the bat- Called each frame/loop
+     *
+     */
     void update(long fps){
     // Move the bat based on the mBatMoving variable
     // and the speed of the previous frame

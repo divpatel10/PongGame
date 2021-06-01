@@ -4,6 +4,9 @@ import android.graphics.RectF;
 
 import java.util.Random;
 
+/**
+ * Represents the Ball
+ */
 public class Ball {
     // These are the member variables (fields)
     // They all have the m prefix
@@ -37,6 +40,10 @@ public class Ball {
         return mRect;
     }
 
+    /**
+     *    Update the ball position.
+     *    Called each frame/loop
+     */
     // Update the ball position.
     // Called each frame/loop
     void update(long fps) {
@@ -53,22 +60,34 @@ public class Ball {
         mRect.bottom = mRect.top + mBallHeight;
     }
 
-    // Reverse the vertical direction of travel
+    /**
+     * Reverse the vertical direction of travel
+     */
     void reverseYVelocity(){
         mYVelocity =  -mYVelocity ;
     }
-    // Reverse the horizontal direction of travel
+
+
+    /**
+     *  Reverse the horizontal direction of travel
+     */
     void reverseXVelocity(){
         mXVelocity = -mXVelocity ;
     }
 
+
+    /**
+     * Resets the ball positon and velocity to their initial states
+     * @param x Screen width
+     * @param y Screen Height
+     */
     void reset(int x, int y){
     // Initialise the four points of
     // the rectangle which defines the ball
         mRect.left = x / 2;
-        mRect.top = 0;
+        mRect.top = y/2;
         mRect.right = x / 2 + mBallWidth;
-        mRect.bottom = mBallHeight;
+        mRect.bottom =  y/2+mBallHeight;
     // How fast will the ball travel
     // You could vary this to suit
     // You could even increase it as the game progresses
@@ -78,13 +97,18 @@ public class Ball {
     }
 
     void increaseVelocity(){
-    // increase the speed by 10%
-        mXVelocity = mXVelocity * 1.1f;
-        mYVelocity = mYVelocity * 1.1f;
+    // increase the speed by 1%
+        mXVelocity = mXVelocity * 1.01f;
+        mYVelocity = mYVelocity * 1.01f;
     }
 
-    // Bounce the ball back based on
-    // whether it hits the left or right-hand side
+    /**
+     * Handles ball bounce when it collides with the bat
+     * Bounce the ball back based on
+     *    whether it hits the left or right-hand side
+     * @param batPosition RectF object for the Position of the bat
+     *
+     */
     void batBounce(RectF batPosition){
     // Detect centre of bat
         float batCenter = batPosition.left +
@@ -113,7 +137,10 @@ public class Ball {
     // the screen
     }
 
-    // this function changes the direction of the ball, but maintains the overall velocity of the ball
+    /**
+     *   Handles the direction change of the ball whilst maintaing the same velocity
+     * @param isRight A boolean that represents if the ball is hit on the right side of the bat
+     */
     void changeVelocity( boolean isRight){
         // Random angle from which the ball should bounce
         Random random = new Random();

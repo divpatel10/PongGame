@@ -3,7 +3,9 @@ package com.divyanshu.ponggame;
 import android.graphics.RectF;
 
 
-
+/**
+ * Represents the Obstacles
+ */
 public class Obstacle {
 
     private RectF mRect;
@@ -19,10 +21,15 @@ public class Obstacle {
     final int STOPPED = 0;
     final int LEFT = 1;
     final int RIGHT = 2;
-    // Keeps track of if and how the bat is moving
+    // Keeps track of if and how the obstacle is moving
     // Starting with STOPPED condition
     private int mObstacleState = STOPPED;
 
+    /**
+     * Constructs the obstacles
+     * @param sx Screen width
+     * @param sy Screen height
+     */
     public Obstacle(int sx, int sy){
 
         // Bat needs to know the screen
@@ -35,7 +42,7 @@ public class Obstacle {
         mLength = mScreenX / 10;
         // One fortieth the screen height
         float height = sy / 50;
-        // Configure the starting location of the bat
+        // Configure the starting location of the obstacle
         // Roughly the middle horizontally
         mXCoord = mScreenX / 2;
 
@@ -44,6 +51,8 @@ public class Obstacle {
 
         // The height of the obstacle
         // off the bottom of the screen
+        // The height is set to be 1/5th the height of the screen from top
+        // all the next obstacles will be 100 pixels below the previous obstacle
         float mYCoord = ((sy/5) + height + (100 * TOTAL_OBSTACLES));
 
         // Initialize mRect based on the size and position
@@ -67,6 +76,9 @@ public class Obstacle {
     }
 
 
+    /**
+     * update the position of the obstacles for each frame
+     */
     void update(long fps){
 
         if(mObstacleState == LEFT){
@@ -84,15 +96,10 @@ public class Obstacle {
         else if(mXCoord + mLength >= mScreenX)
         {
             mObstacleState = LEFT;
-
         }
-
 
         mRect.left = mXCoord;
         mRect.right = mXCoord + mLength;
-
-
-
 
     }
 

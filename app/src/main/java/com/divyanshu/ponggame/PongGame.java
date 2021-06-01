@@ -18,6 +18,9 @@ import android.view.SurfaceView;
 
 import java.io.IOException;
 
+/**
+ * Represnts the Pong Game, Handles all the functions of game
+ */
 public class PongGame extends SurfaceView implements Runnable {
 
     // Are we debugging?
@@ -41,8 +44,9 @@ public class PongGame extends SurfaceView implements Runnable {
     private Bat mBat;
     private Ball mBall;
 
-    private Obstacle mObstacle1;
-    private Obstacle mObstacle2;
+//    private Obstacle mObstacle1;
+//    private Obstacle mObstacle2;
+    BrickWall brickWall;
 
     // The current score and lives remaining
     private int mScore;
@@ -63,7 +67,13 @@ public class PongGame extends SurfaceView implements Runnable {
     private int mMissID = -1;
 
 
-
+    /**
+     * Constructs all the variables of the PongGame Class
+     *
+     * @param context
+     * @param x Screen width
+     * @param y Screen Height
+     */
     // The PongGame constructor
     // Called when this line:
     // mPongGame = new PongGame(this, size.x, size.y);
@@ -91,11 +101,12 @@ public class PongGame extends SurfaceView implements Runnable {
         mBall = new Ball(mScreenX);
         mBat = new Bat(mScreenX, mScreenY);
 
-        mObstacle1 = new Obstacle(mScreenX,mScreenY);
-        mObstacle1.setMovementState(mObstacle1.LEFT);
+        brickWall = new BrickWall(5,10,mScreenX,mScreenY);
+        //mObstacle1 = new Obstacle(mScreenX,mScreenY);
+        //mObstacle1.setMovementState(mObstacle1.LEFT);
 
-        mObstacle2 = new Obstacle(mScreenX,mScreenY);
-        mObstacle2.setMovementState(mObstacle2.RIGHT);
+        //mObstacle2 = new Obstacle(mScreenX,mScreenY);
+        //mObstacle2.setMovementState(mObstacle2.RIGHT);
 
 
         // Prepare the SoundPool instance
@@ -137,6 +148,9 @@ public class PongGame extends SurfaceView implements Runnable {
         startNewGame();
     }
 
+    /**
+     * Starts a new game
+     */
     // The player has just lost
     // or is starting their first game
     private void startNewGame() {
@@ -144,10 +158,13 @@ public class PongGame extends SurfaceView implements Runnable {
         mBall.reset(mScreenX, mScreenY);
         // Reset the score and the player's chances
         mScore = 0;
-        mLives = 3;
+        mLives = 10;
+        brickWall.build();
     }
 
-    // Draw the game objects and the HUD
+    /**
+     * Draws the game objects and the HUD
+     */
     private void draw() {
         if (mOurHolder.getSurface().isValid()) {
             // Lock the canvas (graphics memory) ready to draw
@@ -162,10 +179,10 @@ public class PongGame extends SurfaceView implements Runnable {
             mCanvas.drawRect(mBall.getRect(), mPaint);
             mCanvas.drawRect(mBat.getRect(), mPaint);
 
-            mCanvas.drawRect(mObstacle1.getRect(), mPaint);
-            mCanvas.drawRect(mObstacle2.getRect(), mPaint);
+//            mCanvas.drawRect(mObstacle1.getRect(), mPaint);
+//            mCanvas.drawRect(mObstacle2.getRect(), mPaint);
 
-
+            brickWall.update(mCanvas);
             // Choose the font size
             mPaint.setTextSize(mFontSize);
             // Draw the HUD
@@ -190,12 +207,15 @@ public class PongGame extends SurfaceView implements Runnable {
     }
 
 
-    // When we start the thread with:
-    // mGameThread.start();
-    // the run method is continuously called by Android
-    // because we implemented the Runnable interface
-    // Calling mGameThread.join();
-    // will stop the thread
+    /**
+     *     When we start the thread with:
+     *      mGameThread.start();
+     *      the run method is continuously called by Android
+     *      because we implemented the Runnable interface
+     *      Calling mGameThread.join();
+     *      will stop the thread
+     */
+
     @Override
     public void run() {
         // mPlaying gives us finer control
@@ -236,14 +256,23 @@ public class PongGame extends SurfaceView implements Runnable {
 
     }
 
+    /**
+     * Updates the Ball, Bat, and Brick objects
+     */
     private void update() {
         // Update the bat and the ball
         mBall.update(mFPS);
         mBat.update(mFPS);
-        mObstacle1.update(mFPS);
-        mObstacle2.update(mFPS);
+        brickWall.update(mCanvas);
+//        mObstacle1.update(mFPS);
+//        mObstacle2.update(mFPS);
+
     }
 
+
+    /**
+     * Handles collisions and ball bounces
+     */
     private void detectCollisions() {
         // Has the bat hit the ball?
         if(RectF.intersects(mBat.getRect(), mBall.getRect())) {
@@ -254,19 +283,37 @@ public class PongGame extends SurfaceView implements Runnable {
             mSP.play(mBeepID, 1, 1, 0, 0, 1);
         }
 
-        // Has the bat hit the obstacles?
-        if(RectF.intersects(mObstacle1.getRect(), mBall.getRect())) {
-            mBall.batBounce(mBat.getRect());
-            mBall.increaseVelocity();
-            mScore++;
-            mSP.play(mBeepID, 1, 1, 0, 0, 1);
-        }
+        // Has the ball hit the obstacles?
+//        if(RectF.intersects(mObstacle1.getRect(), mBall.getRect())) {
+//            mBall.batBounce(mBat.getRect());
+//            mBall.increaseVelocity();
+//            mScore++;
+//            mSP.play(mBeepID, 1, 1, 0, 0, 1);
+//        }
 
-        if(RectF.intersects(mObstacle2.getRect(), mBall.getRect())) {
-            mBall.batBounce(mBat.getRect());
-            mBall.increaseVelocity();
-            mScore++;
-            mSP.play(mBeepID, 1, 1, 0, 0, 1);
+//        if(RectF.intersects(mObstacle2.getRect(), mBall.getRect())) {
+//            mBall.batBounce(mBat.getRect());
+//            mBall.increaseVelocity();
+//            mScore++;
+//            mSP.play(mBeepID, 1, 1, 0, 0, 1);
+//        }
+
+
+        //Has the ball hit any bricks
+        int totalBricks = brickWall.getTotalBricks();
+        for(int i=0; i<totalBricks; i++){
+            Brick currentBrick = brickWall.getBrick(i);
+
+            if(RectF.intersects(currentBrick.getRect(), mBall.getRect())
+                && !currentBrick.isBrickHit()    ) {
+                mBall.reverseYVelocity();
+                mScore++;
+                brickWall.hitBrick(i);
+                mSP.play(mBoopID, 1, 1, 0, 0, 1);
+
+            }
+
+
         }
 
         // Has the ball hit the edge of the screen
@@ -327,7 +374,9 @@ public class PongGame extends SurfaceView implements Runnable {
     }
 
 
-    // Handle all the screen touches
+    /**
+     * Handles all the screen touches for example left touch should move the bat to left
+     */
     @Override
     public boolean onTouchEvent(MotionEvent motionEvent) {
         // This switch block replaces the
@@ -363,5 +412,6 @@ public class PongGame extends SurfaceView implements Runnable {
         }
         return true;
     }
+
 
 }
